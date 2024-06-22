@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  search:
+    build: ./
+    container_name: search
+    volumes:
+      - ./.env.docker:/app/.env
+    ports:
+      - "3000:3000"
+    restart: always
+
+  freeduckduckgo:
+    image: ghcr.io/missuo/freeduckduckgo:latest
+    container_name: freeduckduckgo
+    restart: always
+    #ports:
+    #  - "3456:3456"
+
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: always
+    # ports:
+    #   - "127.0.0.1:8080:8080"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/

@@ -1,0 +1,56 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { ISelectOptions } from '../interface';
+import { useAppStore } from '../store';
+import { useI18n } from 'vue-i18n';
+const appStore = useAppStore();
+
+const engines = ref<ISelectOptions[]>([]);
+const engine = ref(appStore.engine);
+const { t } = useI18n();
+const onSelect = (val: any) => {
+  appStore.updateEngine(val);
+};
+
+onMounted(() => {
+  engines.value = [
+  {
+      name: t('searxng'),
+      value: 'SEARXNG'
+    },
+    //{
+    //  name: t('google'),
+    //  value: 'GOOGLE'
+    //},
+    {
+      name: t('bing'),
+      value: 'BING'
+    },
+    //{
+    //  name: t('sogou'),
+    //  value: 'SOGOU'
+    //}
+  ];
+});
+</script>
+
+<script lang="ts">
+export default {
+  name: 'SearchEngineSelect'
+};
+</script>
+
+<template>
+  <div class="search-mode">
+    <t-select style="width: 102px" v-model="engine" :placeholder="t('selectEngine')" @change="onSelect">
+      <t-option v-for="item in engines" :key="item.value" :value="item.value" :label="item.name"></t-option>
+    </t-select>
+  </div>
+</template>
+
+<style scoped>
+.search-mode {
+  --td-radius-default: 20px;
+  --td-radius-small: 20px;
+}
+</style>
